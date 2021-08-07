@@ -1,0 +1,78 @@
+.form {
+  margin: 1rem 0;
+  height: 19rem;
+  overflow: auto;
+}
+
+.form .checkoutTitle {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    font-style: oblique;
+    color: #8d0909;
+}
+
+.textFields {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control {
+  margin-bottom: 0.5rem;
+}
+
+.control label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.control input {
+  font: inherit;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 20rem;
+  max-width: 100%;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-right: 25px;
+}
+
+.actions button {
+  font: inherit;
+  color: #5a1a01;
+  cursor: pointer;
+  background-color: #ffe6dc;
+  border: none;
+  border-radius: 25px;
+  padding: 0.5rem 2rem;
+}
+
+.actions .submit {
+  border: 1px solid #5a1a01;
+  background-color: #5a1a01;
+  color: white;
+}
+
+.actions .submit:hover,
+.actions .submit:active {
+  background-color: #7a2706;
+}
+
+.invalid label {
+  color: #ca3e51;
+}
+
+.invalid input {
+  border-color: #aa0b20;
+  background-color: #ffeff1;
+}
