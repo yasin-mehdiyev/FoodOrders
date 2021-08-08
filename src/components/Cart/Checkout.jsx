@@ -1,60 +1,126 @@
-import React, { useRef } from "react";
+import React, { useContext } from "react";
 import useInputs from "../../customhook/useInputs";
 import classes from "./Checkout.module.css";
+import CartContext from "../../store/CartContext";
 
 const Checkout = (props) => {
 
-  const { enteredVal, inputRef } = useInputs((value) => value.trim().length === 0);
+  let bucket = useContext(CartContext);
 
-//   let nameInputRef = useRef();
-//   let streetInputRef = useRef();
-//   let postalInputRef = useRef();
-//   let cityInputRef = useRef();
+  const { 
+    enteredVal : enteredValName, 
+    inputRef : inputRefName, 
+    inputChangeHandler : inputChangeHandlerName, 
+    reset : resetName, 
+    inputBlurHandler : inputBlurHandlerName, 
+    isEmptyInput : isEmptyInputName, 
+    showError : showErrorName 
+  } = useInputs((value) => value.trim().length === 0);
 
-  const checkoutFormHandler = (ev) => {
-    ev.preventDefault();
-    // let enteredName = nameInputRef.current.value;
-    // let enteredStreet = streetInputRef.current.value;
-    // let enteredPostal = postalInputRef.current.value;
-    // let enteredCity = cityInputRef.current.value;
-    
-    alert(enteredVal);
+  const { 
+    enteredVal : enteredValStreet, 
+    inputRef : inputRefStreet, 
+    inputChangeHandler : inputChangeHandlerStreet, 
+    reset : resetStreet, 
+    inputBlurHandler : inputBlurHandlerStreet, 
+    isEmptyInput : isEmptyInputStreet, 
+    showError : showErrorStreet,
+  } = useInputs((value) => value.trim().length === 0);
 
-    // alert(`Checkout Form Handler Datas: ${enteredName} - ${enteredStreet} -  ${enteredPostal} - ${enteredCity}`);
+  const { 
+    enteredVal : enteredValCity, 
+    inputRef : inputRefCity, 
+    inputChangeHandler : inputChangeHandlerCity, 
+    reset : resetCity, 
+    inputBlurHandler : inputBlurHandlerCity, 
+    isEmptyInput : isEmptyInputCity, 
+    showError : showErrorCity,
+  } = useInputs((value) => value.trim().length === 0);
 
-    // nameInputRef.current.value = '';
-    // streetInputRef.current.value = '';
-    // postalInputRef.current.value = '';
-    // cityInputRef.current.value = '';
+  const { 
+    enteredVal : enteredValPostal, 
+    inputRef : inputRefPostal, 
+    inputChangeHandler : inputChangeHandlerPostal, 
+    reset : resetPostal, 
+    inputBlurHandler : inputBlurHandlerPostal, 
+    isEmptyInput : isEmptyInputPostal,
+    showError : showErrorPostal,
+  } = useInputs((value) => value.trim().length !== 4);
 
+  const resetFunctions = () => {
+    resetName();
+    resetStreet();
+    resetPostal();
+    resetCity();
   };
 
+  const sendPostRequest = async () => {
+    await fetch('https://foodapp-a78d1-default-rtdb.firebaseio.com/orders.json',{
+      method: 'POST',
+      body: JSON.stringify({
+        users: {
+          name: enteredValName,
+          street: enteredValStreet,
+          postalCode: enteredValPostal,
+          city: enteredValCity
+        },
+        data: bucket.items
+      })
+    })
+  };
+
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+    sendPostRequest();
+    resetFunctions();
+    props.onCancel();
+    bucket.clearItem();
+    alert('SUCCESSFULLY PAYMENT PROCCESS');
+  };
+
+  // console.log('bucket',bucket);
+
   return (
-    <form className={classes.form} onSubmit={checkoutFormHandler}>
+    <form className={classes.form} onSubmit={handleSubmit}>
 
       <h2 className={classes.checkoutTitle}>Checkout Form</h2>
 
       <div className={classes.textFields}>
         <div>
           <div className={classes.control}>
-            <label htmlFor="name">Your Name: </label>
-            <input type="text" id="name" ref={inputRef} />
+            <label htmlFor="name" className={showErrorName ? classes.invalidLabel : null}>Your Name: </label>
+            <input type="text" id="name" ref={inputRefName} onChange={inputChangeHandlerName} onBlur={inputBlurHandlerName} className={showErrorName ? classes.invalidInput : null} />
+            {
+              showErrorName && <p className={classes.errorText}>Please, To fill name input field.</p>
+            }
           </div>
 
           <div className={classes.control}>
-            <label htmlFor="street">Street: </label>
-            <input type="text" id="street" />
+            <label htmlFor="street" className={showErrorStreet ? classes.invalidLabel : null}>Your Street: </label>
+            <input type="text" id="street" ref={inputRefStreet} onChange={inputChangeHandlerStreet} onBlur={inputBlurHandlerStreet} className={showErrorStreet ? classes.invalidInput : null} />
+            {
+              showErrorStreet && <p className={classes.errorText}>Please, To fill street input field.</p>
+            }
           </div>
 
           <div className={classes.control}>
-            <label htmlFor="postal">Postal Code: </label>
-            <input type="text" id="postal" />
+            <label htmlFor="postal" className={showErrorPostal ? classes.invalidLabel : null}>Postal Code: </label>
+            <input type="text" id="postal" ref={inputRefPostal} onChange={inputChangeHandlerPostal} onBlur={inputBlurHandlerPostal} className={showErrorPostal ? classes.invalidInput : null} />
+              
+            {
+              showErrorPostal && <p className={classes.errorText}>Postal Code length must be 4.</p>
+            }
+
           </div>
 
           <div className={classes.control}>
-            <label htmlFor="city">City: </label>
-            <input type="text" id="city" />
+            <label htmlFor="city" className={showErrorCity ? classes.invalidLabel : null}>Your City: </label>
+            <input type="text" id="city" ref={inputRefCity} onChange={inputChangeHandlerCity} onBlur={inputBlurHandlerCity} className={showErrorCity ? classes.invalidInput : null} />
+            {
+              showErrorCity && <p className={classes.errorText}>Please, To fill city input field.</p>
+            }
           </div>
+
         </div>
       </div>
 
@@ -62,7 +128,7 @@ const Checkout = (props) => {
         <button type="button" onClick={props.onCancel}>
           Cancel
         </button>
-        <button className={classes.submit}>Confirm</button>
+        <button className={classes.submit} disabled={(showErrorName || isEmptyInputName || showErrorStreet || isEmptyInputStreet || showErrorPostal || isEmptyInputPostal || showErrorCity || isEmptyInputCity ? true : false)}>Confirm</button>
       </div>
     </form>
   );

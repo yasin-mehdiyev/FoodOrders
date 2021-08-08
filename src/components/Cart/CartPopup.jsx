@@ -7,7 +7,7 @@ import Checkout from "./Checkout";
 
 const CartPopup = (props) => {
   const [existCheckoutForm, setExistCheckoutForm] = useState(false);
-  const ctx = useContext(CartContext);
+  let ctx = useContext(CartContext);
 
   const totalAmount = ctx.totalAmount.toFixed(2);
   const hasItem = ctx.items.length > 0;

@@ -1,6 +1,6 @@
 .form {
   margin: 1rem 0;
-  height: 19rem;
+  height: 13rem;
   overflow: auto;
 }
 
@@ -68,11 +68,23 @@
   background-color: #7a2706;
 }
 
-.invalid label {
-  color: #ca3e51;
+
+.actions .submit:disabled {
+  cursor: not-allowed;
 }
 
-.invalid input {
-  border-color: #aa0b20;
-  background-color: #ffeff1;
+
+.invalidLabel {
+  color: #ca3e51!important;
+}
+
+.invalidInput {
+  border: 1px solid #aa0b20!important;
+}
+
+.errorText {
+  color: #ca3e51;
+  font-size: 13px;
+  margin-top: 2px;
+  font-weight: bold;
 }

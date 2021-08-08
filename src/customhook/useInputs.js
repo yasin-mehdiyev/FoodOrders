@@ -18,9 +18,9 @@ const useInputs = (validateVal) => {
         setShowError(false);
     }
 
-    // const inputChangeHandler = () => {
-    //     setEnteredVal(inputRef.current.value);
-    // };
+    const inputChangeHandler = () => {
+        setEnteredVal(inputRef.current.value);
+    };
 
     const inputBlurHandler = () => {
         isCheckEmptyInput();
@@ -32,6 +32,7 @@ const useInputs = (validateVal) => {
     };
 
     const reset = () => {
+        inputRef.current.value = '';
         setEnteredVal("");
     }
 
@@ -42,11 +43,10 @@ const useInputs = (validateVal) => {
         showError,
         textColor,
         defineClasses,
-        // inputChangeHandler,
+        inputChangeHandler,
         inputBlurHandler,
         reset,
     }
-    
 }
 
 export default useInputs;
